@@ -1,0 +1,140 @@
+/* 1. Use a more-intuitive box-sizing model */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* 2. Remove default margin */
+* {
+  margin: 0;
+}
+
+body {
+  /* 3. Add accessible line-height */
+  line-height: 1.5;
+  /* 4. Improve text rendering */
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 5. Improve media defaults */
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+}
+
+/* 6. Inherit fonts for form controls */
+input, button, textarea, select {
+  font: inherit;
+}
+
+/* 7. Avoid text overflows */
+p, h1, h2, h3, h4, h5, h6 {
+  overflow-wrap: break-word;
+}
+
+/* 8. Improve line wrapping */
+p {
+  text-wrap: pretty;
+}
+h1, h2, h3, h4, h5, h6 {
+  text-wrap: balance;
+}
+
+/*
+  9. Create a root stacking context
+*/
+#root, #__next {
+  isolation: isolate;
+}
+
+
+
+/* My Style */
+body {
+  font-family: 'Inter', sans-serif;
+}
+.header {
+  background-color: #F3E8FF;
+  padding: 64px;
+}
+.foto-profil {
+  width: 225px;
+  height: 225px;
+  object-fit: cover;
+  margin: auto;
+  border-radius: 16px;
+}
+.nama {
+  margin-top: 32px;
+  font-size: 32px;
+  text-align: center;
+  font-weight: 600;
+}
+.role {
+  margin-top: 24px;
+  font-size: 24px;
+  text-align: center;
+}
+
+.tentang-saya, .prestasi {
+  padding: 64px 80px;
+}
+.tentang-saya p {
+  margin-top: 40px;
+  text-align: center;
+  font-size: 24px;
+}
+.tentang-saya h1 {
+  text-align: center;
+  font-size: 40px;
+  font-weight: 600;
+}
+
+.riwayat-pendidikan {
+  padding: 64px 120px;
+  background-color: #F3E8FF;
+}
+.riwayat-pendidikan h1 {
+  text-align: center;
+}
+.riwayat-pendidikan .content {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+.riwayat-pendidikan img {
+  width: 50%;
+}
+.riwayat-pendidikan .history {
+  width: 50%;
+}
+.riwayat-pendidikan .jenjang {
+  padding: 8px 16px;
+  background-color: #E9D5FF;
+  border-radius: 1000px;
+  width: 162px;
+  text-align: center;
+}
+.riwayat-pendidikan .sekolah {
+  font-size: 28px;
+  margin-top: 24px;
+}
+.riwayat-pendidikan .history-item {
+  margin-top: 40px;
+}
+.prestasi h1 {
+  text-align: center;
+}
+.prestasi .juara {
+  padding: 32px;
+  margin-top: 40px;
+  border-bottom: 1px solid #7E22CE;
+}
+.prestasi .juara h2 {
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+.footer {
+  padding: 32px 80px;
+  text-align: center;
+  background-color: #F3E8FF;
+}

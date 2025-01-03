@@ -1,0 +1,235 @@
+CREATE TABLE cabang (
+  ID_Cabang varchar(11) NOT NULL,
+  Nomor_Telepon varchar(20) NOT NULL,
+  Kode_Pos varchar(10) NOT NULL,
+  Nama_Provinsi varchar(50) NOT NULL,
+  Nama_Kota varchar(50) NOT NULL,
+  Nama_Jalan varchar(50) NOT NULL,
+  PRIMARY KEY (ID_Cabang)
+);
+
+CREATE TABLE member_pelanggan (
+  ID_Member varchar(11) NOT NULL,
+  ID_Cabang varchar(11) NOT NULL,
+  Nama_lengkap varchar(200) NOT NULL,
+  Alamat varchar(255) NOT NULL,
+  Tanggal_Pendaftaran date NOT NULL,
+  PRIMARY KEY (ID_Member),
+  FOREIGN KEY (ID_Cabang) REFERENCES cabang(ID_Cabang)
+);
+
+CREATE TABLE karyawan (
+  ID_Staff varchar(11) NOT NULL,
+  Nama_Karyawan varchar(200) NOT NULL,
+  Gaji int NOT NULL,
+  Jabatan varchar(30) NOT NULL,
+  ID_Cabang varchar(11) NOT NULL,
+  PRIMARY KEY (ID_Staff),
+  FOREIGN KEY (ID_Cabang) REFERENCES cabang(ID_Cabang)
+);
+
+CREATE TABLE kendaraan (
+  ID_Kendaraan varchar(11) NOT NULL,
+  Nama_Kendaraan varchar(50) NOT NULL,
+  Tahun_Pembuatan year(4) NOT NULL,
+  Status_Kendaraan varchar(30) NOT NULL,
+  Warna varchar(30) NOT NULL,
+  Denda_Per_Hari int NOT NULL,
+  Merk_Kendaraan varchar(10) NOT NULL,
+  Harga_Sewa_Harian int NOT NULL,
+  Model_Kendaraan varchar(50) NOT NULL,
+  ID_Cabang varchar(11) NOT NULL,
+  Kategori varchar(25) NOT NULL,
+  PRIMARY KEY (ID_Kendaraan),
+  FOREIGN KEY (ID_Cabang) REFERENCES cabang(ID_Cabang)
+);
+
+CREATE TABLE penyewaan (
+  Nomor_Invoice int NOT NULL,
+  Total_Biaya int NOT NULL,
+  ID_Member varchar(10) NOT NULL,
+  Waktu_Penyewaan datetime NOT NULL,
+  PRIMARY KEY (Nomor_Invoice),
+  FOREIGN KEY (ID_Member) REFERENCES member_pelanggan(ID_Member)
+);
+
+CREATE TABLE detail_penyewaan (
+  Nomor_Invoice int NOT NULL,
+  Id_Kendaraan varchar(11) NOT NULL,
+  Total_Sewa int NOT NULL,
+  Total_Denda int NOT NULL,
+  Waktu_Pengembalian datetime NOT NULL,
+  Durasi int NOT NULL,
+  FOREIGN KEY (Nomor_Invoice) REFERENCES penyewaan(Nomor_Invoice),
+  FOREIGN KEY (ID_Kendaraan) REFERENCES kendaraan(ID_Kendaraan)
+);
+
+CREATE TABLE pembayaran (
+  Payment_ID varchar(11) NOT NULL,
+  Metode_Pembayaran varchar(20) NOT NULL,
+  Tanggal_Pembayaran date NOT NULL,
+  Nomor_Invoice int NOT NULL,
+  Status_Pembayaran varchar(20) NOT NULL,
+  PRIMARY KEY (Payment_ID),
+  FOREIGN KEY (Nomor_Invoice) REFERENCES penyewaan(Nomor_Invoice)
+);
+
+CREATE TABLE penilaian (
+  ID_Penilaian varchar(11) NOT NULL,
+  ID_Kendaraan varchar(11) NOT NULL,
+  ID_Member varchar(11) NOT NULL,
+  Tanggal_penilaian date NOT NULL,
+  Score int NOT NULL,
+  Nama_lengkap varchar(200) NOT NULL,
+  Komentar text NOT NULL,
+  PRIMARY KEY (ID_Penilaian),
+  FOREIGN KEY (ID_Kendaraan) REFERENCES kendaraan(ID_Kendaraan),
+  FOREIGN KEY (ID_Member) REFERENCES member_pelanggan(ID_Member)
+);
+
+INSERT INTO cabang (ID_Cabang, Nomor_Telepon, Kode_Pos, Nama_Provinsi, Nama_Kota, Nama_Jalan) VALUES
+('A001', '123-456-789', '8010', 'Bali', 'Badung', 'Jalan Melati'),
+('A002', '012-345-678', '8011', 'Bali', 'Karangasem', 'Jalan Cempaka'),
+('A003', '901-234-567', '8012', 'Bali', 'Gianyar', 'Jalan Sakura'),
+('A004', '890-123-456', '8013', 'Bali', 'Tabanan', 'Jalan Cendana'),
+('A005', '789-012-345', '8014', 'Bali', 'Singaraja', 'Jalan Mawar');
+
+INSERT INTO member_pelanggan (ID_Member, ID_Cabang, Nama_lengkap, Alamat, Tanggal_Pendaftaran) VALUES
+('B001', 'A001', 'Made Wijaya', 'Jl. Sunset Road, Badung', '2024-12-01'),
+('B002', 'A002', 'Ketut Artha', 'Jl. Raya Kubu, Karangasem', '2024-12-02'),
+('B003', 'A003', 'Nyoman Puspita', 'Jl. Raya Ubud, Gianyar', '2024-12-03'),
+('B004', 'A004', 'Putu Candra', 'Jl. Danau Tamblingan, Tabanan', '2024-12-04'),
+('B005', 'A005', 'Ayu Kartika', 'Jl. Pantai Lovina, Buleleng', '2024-12-05');
+
+INSERT INTO karyawan (ID_Staff, Nama_Karyawan, Gaji, Jabatan, ID_Cabang) VALUES
+('S001', 'Made Putra', 9000000, 'Manager', 'A001'),
+('S002', 'Ketut Parta', 6000000, 'Karyawan', 'A001'),
+('S003', 'Wayan Suryana', 7200000, 'Karyawan', 'A001'),
+('S004', 'Nyoman Yuda', 5500000, 'Karyawan', 'A001'),
+('S005', 'Nyoman Sudira', 8500000, 'Manager', 'A002');
+
+INSERT INTO kendaraan (ID_Kendaraan, Nama_Kendaraan, Tahun_Pembuatan, Status_Kendaraan, Warna, Denda_Per_Hari, Merk_Kendaraan, Harga_Sewa_Harian, Model_Kendaraan, ID_Cabang, Kategori) VALUES
+('K001', 'Avanza', '2020', 'Tersedia', 'Putih', 50000, 'Toyota', 300000, 'Avanza G', 'A001', 'Mobil'),
+('K002', 'NMax', '2021', 'Tersedia', 'Hitam', 25000, 'Yamaha', 100000, 'NMax 155', 'A002', 'Motor'),
+('K003', 'Brio', '2019', 'Tersedia', 'Merah', 40000, 'Honda', 250000, 'Brio Satya', 'A003', 'Mobil'),
+('K004', 'Xenia', '2021', 'Tersedia', 'Silver', 45000, 'Daihatsu', 280000, 'Xenia R', 'A004', 'Mobil'),
+('K005', 'Beat', '2020', 'Tersedia', 'Biru', 20000, 'Honda', 80000, 'Beat eSP', 'A005', 'Motor');
+
+INSERT INTO penyewaan (Nomor_Invoice, Total_Biaya, ID_Member, Waktu_Penyewaan) VALUES
+(1, 900000, 'B001', '2024-11-01 08:00:00'), 
+(2, 800000, 'B002', '2024-11-02 09:00:00'), 
+(3, 560000, 'B003', '2024-11-03 10:00:00'), 
+(4, 1160000, 'B004', '2024-11-04 11:00:00'),
+(5, 2500000, 'B005', '2024-11-05 12:00:00');
+
+INSERT INTO detail_penyewaan (Nomor_Invoice, ID_Kendaraan, Total_Sewa, Total_Denda, Waktu_Pengembalian, Durasi) VALUES
+(1, 'K001', 900000, 0, '2024-11-04 08:00:00', 3),
+(2, 'K002', 300000, 0, '2024-11-04 09:00:00', 3),
+(2, 'K003', 500000, 0, '2024-11-05 09:00:00', 2),
+(3, 'K004', 560000, 0, '2024-11-05 10:00:00', 2),
+(4, 'K005', 80000, 0, '2024-11-05 11:00:00', 1);
+
+INSERT INTO pembayaran (Payment_ID, Metode_Pembayaran, Tanggal_Pembayaran, Nomor_Invoice, Status_Pembayaran) VALUES
+('P001', 'Transfer Bank', '2024-12-01', 1, 'Lunas'),
+('P002', 'Tunai', '2024-12-02', 2, 'Lunas'),
+('P003', 'Tunai', '2024-12-03', 3, 'Lunas'),
+('P004', 'Transfer Bank', '2024-12-04', 4, 'Lunas'),
+('P005', 'Tunai', '2024-12-05', 5, 'Lunas');
+
+INSERT INTO penilaian (ID_Penilaian, ID_Kendaraan, ID_Member, Tanggal_penilaian, Score, Nama_lengkap, Komentar) VALUES
+('N001', 'K001', 'B001', '2024-11-03', 5, 'Made Wijaya', 'Kendaraannya nyaman dan bersih, sangat memuaskan!'),
+('N002', 'K002', 'B002', '2024-11-04', 4, 'Ketut Artha', 'Pengalaman menyenangkan, meski kendaraannya sedikit berisik.'),
+('N003', 'K003', 'B002', '2024-11-05', 2, 'Ketut Artha', 'Kendaraan kurang terawat, ada masalah dengan rem.'),
+('N004', 'K004', 'B003', '2024-11-08', 3, 'Nyoman Puspita', 'Cukup baik, namun bisa lebih nyaman jika kursi diperbaiki.'),
+('N005', 'K005', 'B004', '2024-11-10', 5, 'Putu Candra', 'Kendaraan dalam kondisi sangat baik, puas dengan pelayanannya.');
+
+
+
+
+INSERT INTO `penyewaan` (`Nomor_Invoice`, `Total_Biaya`, `ID_Member`, `Waktu_Penyewaan`) VALUES
+(1, 900000, 'B001', '2024-11-01 08:00:00'), 
+(2, 800000, 'B002', '2024-11-02 09:00:00'), 
+(3, 560000, 'B003', '2024-11-03 10:00:00'), 
+(4, 1160000, 'B004', '2024-11-04 11:00:00'),
+(5, 2500000, 'B005', '2024-11-05 12:00:00'),
+(6, 2335000, 'C001', '2024-11-06 13:00:00'),
+(7, 180000, 'C002', '2024-11-07 14:00:00'), 
+(8, 900000, 'C003', '2024-11-08 15:00:00'), 
+(9, 1660000, 'C004', '2024-11-09 16:00:00'),
+(10, 1100000, 'C005', '2024-11-10 17:00:00');
+
+
+INSERT INTO `detail_penyewaan` (`Nomor_Invoice`, `ID_Kendaraan`, `Total_Sewa`, `Total_Denda`, `Waktu_Pengembalian`, `Durasi`) VALUES
+(1, 'K001', 900000, 0, '2024-11-04 08:00:00', 3),
+(2, 'K002', 300000, 0, '2024-11-04 09:00:00', 3),
+(2, 'K003', 500000, 0, '2024-11-05 09:00:00', 2),
+(3, 'K004', 560000, 0, '2024-11-05 10:00:00', 2),
+(4, 'K005', 80000, 0, '2024-11-05 11:00:00', 1),
+(4, 'K006', 1080000, 0, '2024-11-08 11:00:00', 4),
+(5, 'K007', 2500000, 0, '2024-11-10 12:00:00', 5),
+(6, 'K008', 2250000, 0, '2024-11-11 13:00:00', 5),
+(6, 'K009', 1040000, 85000, '2024-11-09 13:00:00', 2),
+(7, 'K010', 180000, 0, '2024-11-08 14:00:00', 1),
+(8, 'K011', 900000, 0, '2024-11-10 15:00:00', 2),
+(9, 'K012', 1600000, 60000, '2024-11-13 16:00:00', 3),
+(10, 'K013', 200000, 0, '2024-11-12 17:00:00', 2),
+(10, 'K014', 900000, 0, '2024-11-13 17:00:00', 3);
+
+INSERT INTO `pembayaran` (`Payment_ID`, `Metode_Pembayaran`, `Tanggal_Pembayaran`, `Nomor_Invoice`, `Status_Pembayaran`) VALUES
+('P001', 'Transfer Bank', '2024-12-01', 1, 'Lunas'),
+('P002', 'Tunai', '2024-12-02', 2, 'Lunas'),
+('P003', 'Tunai', '2024-12-03', 3, 'Lunas'),
+('P004', 'Transfer Bank', '2024-12-04', 4, 'Lunas'),
+('P005', 'Tunai', '2024-12-05', 5, 'Lunas'),
+('P006', 'Transfer Bank', '2024-12-06', 6, 'Lunas'),
+('P007', 'Transfer Bank', '2024-12-07', 7, 'Lunas'),
+('P008', 'Tunai', '2024-12-08', 8, 'Lunas'),
+('P009', 'Transfer Bank', '2024-12-09', 9, 'Lunas'),
+('P010', 'Transfer Bank', '2024-12-10', 10, 'Lunas');
+
+INSERT INTO `kendaraan` (`ID_Kendaraan`, `Nama_Kendaraan`, `Tahun_Pembuatan`, `Status_Kendaraan`, `Warna`, `Denda_Per_Hari`, `Merk_Kendaraan`, `Harga_Sewa_Harian`, `Model_Kendaraan`, `ID_Cabang`, `kategori`) VALUES
+('K001', 'Avanza', '2020', 'Tersedia', 'Putih', 50000, 'Toyota', '300000', 'Avanza G', 'A001', 'Mobil'),
+('K002', 'NMax', '2021', 'Tersedia', 'Hitam', 25000, 'Yamaha', '100000', 'NMax 155', 'A002', 'Motor'),
+('K003', 'Brio', '2019', 'Tersedia', 'Merah', 40000, 'Honda', '250000', 'Brio Satya', 'A003', 'Mobil'),
+('K004', 'Xenia', '2021', 'Tersedia', 'Silver', 45000, 'Daihatsu', '280000', 'Xenia R', 'A004', 'Mobil'),
+('K005', 'Beat', '2020', 'Tersedia', 'Biru', 20000, 'Honda', '80000', 'Beat eSP', 'A005', 'Motor'),
+('K006', 'Ertiga', '2018', 'Tersedia', 'Hitam', 45000, 'Suzuki', '270000', 'Ertiga GL', 'A006', 'Mobil'),
+('K007', 'Fortuner', '2021', 'Tersedia', 'Hitam', 80000, 'Toyota', '500000', 'Fortuner VRZ', 'A007', 'Mobil'),
+('K008', 'Civic', '2020', 'Tersedia', 'Putih', 70000, 'Honda', '450000', 'Civic Turbo', 'A008', 'Mobil'),
+('K009', 'Pajero', '2021', 'Tersedia', 'Silver', 85000, 'Mitsubishi', '520000', 'Pajero Sport', 'A009', 'Mobil'),
+('K010', 'Vario', '2019', 'Tersedia', 'Merah', 22000, 'Honda', '90000', 'Vario 150', 'A010', 'Motor'),
+('K011', 'Rush', '2020', 'Tersedia', 'Hitam', 50000, 'Toyota', '300000', 'Rush TRD', 'A001', 'Mobil'),
+('K012', 'Yaris', '2021', 'Tersedia', 'Putih', 60000, 'Toyota', '400000', 'Yaris GR', 'A002', 'Mobil'),
+('K013', 'Aerox', '2021', 'Tersedia', 'Abu-abu', 25000, 'Yamaha', '100000', 'Aerox 155', 'A003', 'Motor'),
+('K014', 'HR-V', '2021', 'Tersedia', 'Merah', 70000, 'Honda', '450000', 'HR-V RS', 'A004', 'Mobil'),
+('K015', 'CR-V', '2020', 'Tersedia', 'Hitam', 80000, 'Honda', '500000', 'CR-V Turbo', 'A005', 'Mobil'),
+('K016', 'Xpander', '2021', 'Tersedia', 'Silver', 55000, 'Mitsubishi', '350000', 'Xpander Ultimate', 'A006', 'Mobil'),
+('K017', 'City', '2022', 'Tersedia', 'Putih', 60000, 'Honda', '380000', 'City Hatchback', 'A007', 'Mobil'),
+('K018', 'Lexi', '2020', 'Tersedia', 'Biru', 22000, 'Yamaha', '95000', 'Lexi S', 'A008', 'Motor'),
+('K019', 'Mobilio', '2019', 'Tersedia', 'Hitam', 45000, 'Honda', '270000', 'Mobilio S', 'A009', 'Mobil'),
+('K020', 'Scoopy', '2021', 'Tersedia', 'Kuning', 20000, 'Honda', '85000', 'Scoopy eSP', 'A010', 'Motor'),
+('K021', 'Grand Livina', '2018', 'Tersedia', 'Silver', 40000, 'Nissan', '240000', 'Grand Livina XV', 'A001', 'Mobil'),
+('K022', 'Innova', '2021', 'Tersedia', 'Hitam', 65000, 'Toyota', '420000', 'Innova Reborn', 'A002', 'Mobil'),
+('K023', 'Serena', '2021', 'Tersedia', 'Putih', 80000, 'Nissan', '500000', 'Serena HWS', 'A003', 'Mobil'),
+('K024', 'Swift', '2019', 'Tersedia', 'Merah', 50000, 'Suzuki', '300000', 'Swift GL', 'A004', 'Mobil'),
+('K025', 'CBR', '2022', 'Tersedia', 'Hitam', 30000, 'Honda', '150000', 'CBR 150R', 'A005', 'Motor'),
+('K026', 'Confero', '2020', 'Tersedia', 'Abu-abu', 40000, 'Wuling', '250000', 'Confero S', 'A006', 'Mobil'),
+('K027', 'Alphard', '2022', 'Tersedia', 'Hitam', 150000, 'Toyota', '1000000', 'Alphard 3.5 Q', 'A007', 'Mobil'),
+('K028', 'Cayenne', '2021', 'Tersedia', 'Putih', 200000, 'Porsche', '1500000', 'Cayenne Turbo', 'A008', 'Mobil'),
+('K029', 'PCX', '2021', 'Tersedia', 'Merah', 25000, 'Honda', '110000', 'PCX 160', 'A009', 'Motor'),
+('K030', 'CX-5', '2022', 'Tersedia', 'Silver', 85000, 'Mazda', '550000', 'CX-5 Elite', 'A010', 'Mobil'),
+('K031', 'Avanza', '2020', 'Tersedia', 'Hitam', 50000, 'Toyota', '300000', 'Avanza G', 'A005', 'Mobil'),
+('K032', 'Avanza', '2020', 'Tersedia', 'Merah', 50000, 'Toyota', '300000', 'Avanza G', 'A007', 'Mobil'),
+('K033', 'Avanza', '2020', 'Tersedia', 'Biru', 50000, 'Toyota', '300000', 'Avanza G', 'A003', 'Mobil'),
+('K034', 'Brio', '2019', 'Tersedia', 'Putih', 40000, 'Honda', '250000', 'Brio Satya', 'A009', 'Mobil'),
+('K035', 'Brio', '2019', 'Tersedia', 'Hitam', 40000, 'Honda', '250000', 'Brio Satya', 'A001', 'Mobil'),
+('K036', 'Brio', '2019', 'Tersedia', 'Kuning', 40000, 'Honda', '250000', 'Brio Satya', 'A008', 'Mobil'),
+('K037', 'NMax', '2021', 'Tersedia', 'Biru', 25000, 'Yamaha', '100000', 'NMax 155', 'A006', 'Motor'),
+('K038', 'NMax', '2021', 'Tersedia', 'Abu-abu', 25000, 'Yamaha', '100000', 'NMax 155', 'A010', 'Motor'),
+('K039', 'NMax', '2021', 'Tersedia', 'Merah', 25000, 'Yamaha', '100000', 'NMax 155', 'A002', 'Motor'),
+('K040', 'Xpander', '2021', 'Tersedia', 'Biru', 55000, 'Mitsubishi', '350000', 'Xpander Ultimate', 'A004', 'Mobil'),
+('K041', 'Xpander', '2021', 'Tersedia', 'Hitam', 55000, 'Mitsubishi', '350000', 'Xpander Ultimate', 'A003', 'Mobil'),
+('K042', 'Xpander', '2021', 'Tersedia', 'Merah', 55000, 'Mitsubishi', '350000', 'Xpander Ultimate', 'A007', 'Mobil'),
+('K043', 'Beat', '2020', 'Tersedia', 'Hitam', 20000, 'Honda', '80000', 'Beat eSP', 'A006', 'Motor'),
+('K044', 'Beat', '2020', 'Tersedia', 'Putih', 20000, 'Honda', '80000', 'Beat eSP', 'A002', 'Motor'),
+('K045', 'Beat', '2020', 'Tersedia', 'Merah', 20000, 'Honda', '80000', 'Beat eSP', 'A009', 'Motor');
